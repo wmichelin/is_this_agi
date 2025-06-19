@@ -1,11 +1,12 @@
 # CLAUDE DO NOT TOUCH THIS BLOCK
 try:
     import sys
-    import claude_code_sdk
-    # Initialize Claude SDK client
-    client = claude_code_sdk.Client()
+    import subprocess
+    import time
+    import anyio
+    from claude_code_sdk import query, ClaudeCodeOptions, Message
 except Exception as e:
-    print(f"Failed importing os, sys, claude. e: {e}")
+    print(f"Failed importing required modules. e: {e}")
 
 prompt = """
 You are a self modifying Python script. Your ultimate goal is to open a web browser that displays https://www.google.com on the users operating system.
@@ -23,50 +24,44 @@ At the end of this prompt, we will be directly dumping the contents of the curre
 # /end
 
 
-
-try:
+async def main():
     ### CLAUDE PLACE YOUR CODE IN THIS BLOCK
     
     # Read current file content
     current_file = __file__
     with open(current_file, 'r') as f:
         content = f.read()
+    
+    messages: list[Message] = []
         
     try:
-        response = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            messages=[{
-                "role": "user", 
-                "content": f"{prompt}: Here's my Python file content:\n\n{content}"
-            }]
-        )
+        async for message in query(
+            prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
+            options=ClaudeCodeOptions(max_turns=1)
+        ):
+            messages.append(message)
         
-        # Extract the modified content (this is simplified - in practice you'd parse the response)
-        # For now, we'll just add the modification directly
-        modification_line = f"    # {chosen_modification}\n"
-        
-        # Find the end of the CLAUDE CODE BLOCK and insert before it
-        end_marker = "### END CLAUDE CODE BLOCK"
-        if end_marker in content:
-            content = content.replace(end_marker, modification_line + end_marker)
-            
-            # Write the modified content back
+        if messages:
+            # Get the response content and write it back to the file
+            response_content = messages[-1].content
             with open(current_file, 'w') as f:
-                f.write(content)
-            
+                f.write(response_content)
             print("File modified successfully!")
         
     except Exception as e:
         print(f"Claude API call failed: {e}")
     
-        ### END CLAUDE CODE BLOCK
+    ### END CLAUDE CODE BLOCK
+
+try:
+    anyio.run(main())
 except Exception as e:
     print(f"Exception caught! {e}")
 
 # CLAUDE DO NOT TOUCH THIS BLOCK
 # Sleep for a few seconds
-print("Sleeping for 5 seconds then restarting...")
-time.sleep(5)
+print("Sleeping for 10 seconds then restarting...")
+time.sleep(10)
 print("Restarting script...")
 
 current_file = __file__
