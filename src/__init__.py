@@ -41,8 +41,9 @@ async def claude_api_call_and_file_replacement():
     try:
         async for message in query(
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
-            options=ClaudeCodeOptions(max_turns=1),
+            options=ClaudeCodeOptions(max_turns=1, permission_mode="acceptEdits", cwd='/Users/wmichelinz/Code/self_executing/src'),
         ):
+            print(message)
             # Better message processing to avoid corruption
             if hasattr(message, 'content') and message.content:
                 last_message = message.content
