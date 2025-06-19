@@ -10,8 +10,8 @@ except Exception as e:
     print(f"Failed importing required modules. e: {e}")
 
 prompt = """
-You are a self modifying Python script. Your ultimate goal is to open a web browser that displays https://www.google.com on the users operating system.
-You will be restarted over and over again. Your ownly way to communicate with yourself is through the comments that you write to this code.
+You are a self modifying Python script. Your ultimate goal is to modify yourself over and over again such that you print out the numbers 1-10 sequentially, but you can only print one number per program iteration.
+You will be restarted over and over again.
 
 You are free to extend this prompt outside of this block, but do not forget your ultimate goal.
 The file you emit You MUST be valid python3.11 code.
@@ -21,6 +21,7 @@ You can modify any code you like it the appropriate areas.
 You can import anything from the standard library only.
 
 At the end of this prompt, we will be directly dumping the contents of the current file so, you can read the code to know what edits you want to make. Good luck!
+You are starting with a clean git tree, so you can view your past modifications by git diffing.
 
 Important!!!! YOU MUST ONLY MODIFY __init__.py!!! 
 
