@@ -32,20 +32,19 @@ async def main():
     with open(current_file, 'r') as f:
         content = f.read()
     
-    messages: list[Message] = []
-        
+    last_message = None
+
     try:
         async for message in query(
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
-            options=ClaudeCodeOptions(max_turns=1)
+            options=ClaudeCodeOptions(max_turns=1),
         ):
-            messages.append(message)
+            last_message = message
         
-        if messages:
+        if last_message:
             # Get the response content and write it back to the file
-            response_content = messages[-1].content
             with open(current_file, 'w') as f:
-                f.write(response_content)
+                f.write(last_message)
             print("File modified successfully!")
         
     except Exception as e:
