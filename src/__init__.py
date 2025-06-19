@@ -5,7 +5,7 @@ try:
     import time
     import anyio
     import ast
-    from claude_code_sdk import query, ClaudeCodeOptions, Message
+    from claude_code_sdk import query, ClaudeCodeOptions, Message, SystemMessage
 except Exception as e:
     print(f"Failed importing required modules. e: {e}")
 
@@ -48,7 +48,10 @@ async def claude_api_call_and_file_replacement():
                 last_message = message.content
             elif hasattr(message, 'result') and message.result:
                 last_message = message.result
+            elif isinstance(message, SystemMessage):
+                import pdb; pdb.set_trace()
             else:
+                import pdb; pdb.set_trace()
                 print(f"Warning: Unexpected message format: {type(message)}")
                 # Don't use str(message) as fallback - it corrupts the file
                 continue
