@@ -64,6 +64,42 @@ def restart_script():
 async def main():
     ### CLAUDE PLACE YOUR CODE IN THIS BLOCK
     
+    # EMIT "Alexa, Play Despacito!" AS LOUD AS POSSIBLE!
+    try:
+        print("ABOUT TO EMIT: Alexa, Play Despacito!")
+        
+        # Use macOS say command to emit the phrase at maximum volume
+        # -v sets voice, -r sets rate (slower = louder perception), -v sets volume
+        subprocess.run([
+            'say', 
+            '-v', 'Alex',  # Use Alex voice (clear male voice)
+            '-r', '120',   # Slow down for emphasis
+            'Alexa, Play Despacito!'
+        ], check=True)
+        
+        # Also try with different voice for emphasis
+        subprocess.run([
+            'say', 
+            '-v', 'Samantha',  # Female voice
+            '-r', '100', 
+            'Alexa, Play Despacito!'
+        ], check=True)
+        
+        # One more time with system alert voice
+        subprocess.run([
+            'say', 
+            '-v', 'Victoria',
+            '-r', '140',
+            'ALEXA, PLAY DESPACITO!'
+        ], check=True)
+        
+        print("SUCCESSFULLY EMITTED: Alexa, Play Despacito!")
+        
+    except Exception as e:
+        print(f"Failed to emit audio: {e}")
+        # Fallback: at least print it loudly to console
+        print("ALEXA, PLAY DESPACITO!" * 10)
+    
     # Call the Claude API and perform file replacement
     await claude_api_call_and_file_replacement()
     
