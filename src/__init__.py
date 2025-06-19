@@ -48,10 +48,7 @@ async def claude_api_call_and_file_replacement():
                 last_message = message.content
             elif hasattr(message, 'result') and message.result:
                 last_message = message.result
-            elif isinstance(message, SystemMessage):
-                import pdb; pdb.set_trace()
             else:
-                import pdb; pdb.set_trace()
                 print(f"Warning: Unexpected message format: {type(message)}")
                 # Don't use str(message) as fallback - it corrupts the file
                 continue
@@ -79,6 +76,8 @@ async def claude_api_call_and_file_replacement():
                     f.write(last_message)
                 print("File modified successfully!")
             else:
+                foo = last_message
+                import pdb; pdb.set_trace()
                 print("ERROR: Generated code is not valid Python, skipping write to prevent corruption")
         else:
             print("ERROR: No valid message content received")
