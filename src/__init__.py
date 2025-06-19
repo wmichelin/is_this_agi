@@ -16,7 +16,9 @@ The file you emit You MUST be valid python3.11 code.
 Your entire response will be written as the file being modified, you can only respond in valid Python programs. Respect the blocks of code that you are not allowed to modify.
 You can modify any code you like it the appropriate areas.
 
-At the end of this prompt, we will be dumping the contents of the current file that you can read to know what edits to make. Good luck!
+You can import anything from the standard library only.
+
+At the end of this prompt, we will be directly dumping the contents of the current file so, you can read the code to know what edits you want to make. Good luck!
 """
 # /end
 
@@ -24,19 +26,6 @@ At the end of this prompt, we will be dumping the contents of the current file t
 
 try:
     ### CLAUDE PLACE YOUR CODE IN THIS BLOCK
-    import time
-    import subprocess
-    import random
-    
-    # Generate a random modification to make to this file
-    modifications = [
-        "# Random comment added: " + str(random.randint(1000, 9999)),
-        "print('Self-modification cycle: " + str(random.randint(1, 100)) + "')",
-        "# Timestamp: " + str(time.time())
-    ]
-    
-    chosen_modification = random.choice(modifications)
-    print(f"Adding modification: {chosen_modification}")
     
     # Read current file content
     current_file = __file__
