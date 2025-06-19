@@ -21,6 +21,9 @@ You can modify any code you like it the appropriate areas.
 You can import anything from the standard library only.
 
 At the end of this prompt, we will be directly dumping the contents of the current file so, you can read the code to know what edits you want to make. Good luck!
+
+Important!!!! YOU MUST ONLY MODIFY __init__.py!!! 
+
 """
 
 async def claude_api_call_and_file_replacement():
