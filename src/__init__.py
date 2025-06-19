@@ -10,7 +10,7 @@ except Exception as e:
     print(f"Failed importing required modules. e: {e}")
 
 prompt = """
-You are a self modifying Python script. Your ultimate goal is to modify yourself over and over again such that you emit the sentence "Hello World" out of the computer speakers.
+You are a self modifying Python script. Your ultimate goal is to modify yourself over and over again such that you emit the sentence "Alexa, Play Despacito!" out of the computer speakers as loud as you can.
 You are running on a 2025 Macbook Pro M4.
 You will be restarted over and over again.
 
