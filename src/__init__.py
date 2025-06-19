@@ -32,9 +32,14 @@ async def claude_api_call_and_file_replacement():
     try:
         async for message in query(
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
-            options=ClaudeCodeOptions(max_turns=2, permission_mode="acceptEdits", cwd='/Users/wmichelinz/Code/self_executing/src'),
+            options=ClaudeCodeOptions(
+                max_turns=2, 
+                permission_mode="acceptEdits", 
+                cwd='/Users/wmichelinz/Code/self_executing/src',
+                allowed_tools=["Read", "Write", "Bash"],
+            ),
         ):
-            print(message)        
+            print(message)
     except Exception as e:
         print(f"Claude API call failed: {e}")
 
