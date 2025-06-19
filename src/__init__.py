@@ -43,20 +43,42 @@ async def claude_api_call_and_file_replacement():
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
             options=ClaudeCodeOptions(max_turns=1),
         ):
-            if hasattr(message, 'content'):
+            # Better message processing to avoid corruption
+            if hasattr(message, 'content') and message.content:
                 last_message = message.content
+            elif hasattr(message, 'result') and message.result:
+                last_message = message.result
             else:
-                last_message = str(message)
+                print(f"Warning: Unexpected message format: {type(message)}")
+                # Don't use str(message) as fallback - it corrupts the file
+                continue
         
         if last_message:
+            # Additional validation checks
+            if not isinstance(last_message, str):
+                print("ERROR: Message content is not a string, skipping write")
+                return
+                
+            # Check if it looks like a ResultMessage string representation
+            if last_message.startswith("ResultMessage("):
+                print("ERROR: Detected ResultMessage string representation, skipping write to prevent corruption")
+                return
+                
             # Validate the code before writing to prevent corruption
             if is_valid_python(last_message):
+                # Backup current file before writing
+                backup_file = current_file + '.backup'
+                with open(backup_file, 'w') as f:
+                    f.write(content)
+                
                 # Get the response content and write it back to the file
                 with open(current_file, 'w') as f:
                     f.write(last_message)
                 print("File modified successfully!")
             else:
                 print("ERROR: Generated code is not valid Python, skipping write to prevent corruption")
+        else:
+            print("ERROR: No valid message content received")
         
     except Exception as e:
         print(f"Claude API call failed: {e}")
