@@ -39,7 +39,7 @@ async def main():
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
             options=ClaudeCodeOptions(max_turns=1),
         ):
-            last_message = message
+            last_message = message.content
         
         if last_message:
             # Get the response content and write it back to the file
@@ -53,7 +53,7 @@ async def main():
     ### END CLAUDE CODE BLOCK
 
 try:
-    anyio.run(main())
+    anyio.run(main)
 except Exception as e:
     print(f"Exception caught! {e}")
 
