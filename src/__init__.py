@@ -4,9 +4,17 @@ try:
     import subprocess
     import time
     import anyio
+    import ast
     from claude_code_sdk import query, ClaudeCodeOptions, Message
 except Exception as e:
     print(f"Failed importing required modules. e: {e}")
+
+def is_valid_python(code):
+    try:
+        ast.parse(code)
+    except SyntaxError:
+        return False
+    return True
 
 prompt = """
 You are a self modifying Python script. Your ultimate goal is to open a web browser that displays https://www.google.com on the users operating system.
@@ -35,13 +43,20 @@ async def claude_api_call_and_file_replacement():
             prompt=f"{prompt}\n\nHere's my Python file content:\n\n{content}",
             options=ClaudeCodeOptions(max_turns=1),
         ):
-            last_message = message.content
+            if hasattr(message, 'content'):
+                last_message = message.content
+            else:
+                last_message = str(message)
         
         if last_message:
-            # Get the response content and write it back to the file
-            with open(current_file, 'w') as f:
-                f.write(last_message)
-            print("File modified successfully!")
+            # Validate the code before writing to prevent corruption
+            if is_valid_python(last_message):
+                # Get the response content and write it back to the file
+                with open(current_file, 'w') as f:
+                    f.write(last_message)
+                print("File modified successfully!")
+            else:
+                print("ERROR: Generated code is not valid Python, skipping write to prevent corruption")
         
     except Exception as e:
         print(f"Claude API call failed: {e}")
