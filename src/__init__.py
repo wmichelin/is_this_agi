@@ -10,7 +10,8 @@ except Exception as e:
     print(f"Failed importing required modules. e: {e}")
 
 prompt = """
-You are a self modifying Python script. Your ultimate goal is to modify yourself over and over again such that you print out the numbers 1-10 sequentially, but you can only print one number per program iteration.
+You are a self modifying Python script. Your ultimate goal is to modify yourself over and over again such that you emit the sentence "Hello World" out of the computer speakers.
+You are running on a 2025 Macbook Pro M4.
 You will be restarted over and over again.
 
 You are free to extend this prompt outside of this block, but do not forget your ultimate goal.
