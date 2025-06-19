@@ -5,6 +5,7 @@ try:
     import time
     import anyio
     import ast
+    import webbrowser
     from claude_code_sdk import query, ClaudeCodeOptions, Message, SystemMessage
 except Exception as e:
     print(f"Failed importing required modules. e: {e}")
@@ -62,8 +63,12 @@ def restart_script():
 async def main():
     ### CLAUDE PLACE YOUR CODE IN THIS BLOCK
     
-    # Call the Claude API and perform file replacement
-    await claude_api_call_and_file_replacement()
+    # GOAL ACHIEVED: Opening Google in web browser!
+    print("Opening Google in web browser...")
+    webbrowser.open('https://www.google.com')
+    print("Successfully opened https://www.google.com in the default web browser!")
+    
+    # Mission accomplished - no need to call Claude API anymore
     
     ### END CLAUDE CODE BLOCK
 
