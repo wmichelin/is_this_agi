@@ -64,7 +64,135 @@ def restart_script():
 async def main():
     ### CLAUDE PLACE YOUR CODE IN THIS BLOCK
     
-    # Call the Claude API and perform file replacement
+    import random
+    import os
+    import json
+    import threading
+    from datetime import datetime
+    
+    print("🚀 ENHANCED SELF-MODIFYING SCRIPT - MISSION: HELLO WORLD AUDIO OUTPUT")
+    print("=" * 70)
+    
+    # Persistence tracking
+    persistence_file = "/tmp/hello_world_script_data.json"
+    
+    # Load previous data if exists
+    script_data = {"iterations": 0, "successful_voices": [], "last_success": None}
+    try:
+        if os.path.exists(persistence_file):
+            with open(persistence_file, 'r') as f:
+                script_data = json.load(f)
+    except Exception as e:
+        print(f"⚠️ Could not load persistence data: {e}")
+    
+    script_data["iterations"] += 1
+    current_iteration = script_data["iterations"]
+    
+    print(f"📊 ITERATION #{current_iteration}")
+    print(f"🎯 MISSION: Generate 'Hello World' audio output through macOS speakers")
+    
+    # Enhanced voice and message strategies
+    premium_voices = ["Alex", "Samantha", "Daniel", "Victoria", "Karen", "Moira", "Rishi", "Tessa", "Fiona", "Fred"]
+    basic_voices = ["Agnes", "Kathy", "Princess", "Vicki", "Bruce", "Junior", "Ralph"]
+    all_voices = premium_voices + basic_voices
+    
+    hello_variations = [
+        "Hello World",
+        "Hello World! This is a self-modifying Python script speaking to you!",
+        f"Hello World from iteration number {current_iteration}",
+        "Hello World! I have successfully achieved my primary objective!",
+        "Greetings World! Audio output mission accomplished!",
+        "Hello World! The self-modification process is working perfectly!"
+    ]
+    
+    # Multi-threaded audio output strategy
+    def threaded_audio_output(voice, message, thread_id):
+        try:
+            subprocess.run(['say', '-v', voice, '-r', '180', message], 
+                          check=True, timeout=8)
+            print(f"✅ Thread {thread_id}: SUCCESS with voice '{voice}'")
+            return True
+        except Exception as e:
+            print(f"❌ Thread {thread_id}: Failed with voice '{voice}': {e}")
+            return False
+    
+    # Primary audio output mission
+    selected_message = random.choice(hello_variations)
+    successful_outputs = 0
+    
+    print(f"🎤 Selected message: '{selected_message}'")
+    print("🔊 Attempting multiple concurrent audio outputs...")
+    
+    # Strategy 1: Simultaneous multi-voice output
+    threads = []
+    for i in range(min(4, len(premium_voices))):
+        voice = premium_voices[i]
+        thread = threading.Thread(
+            target=threaded_audio_output, 
+            args=(voice, selected_message, i+1)
+        )
+        threads.append(thread)
+        thread.start()
+    
+    # Wait for threads to complete
+    for thread in threads:
+        thread.join(timeout=10)
+    
+    # Strategy 2: Sequential reliable output
+    for voice in premium_voices[:3]:
+        try:
+            result = subprocess.run(['say', '-v', voice, selected_message], 
+                                  check=True, capture_output=True, text=True, timeout=10)
+            print(f"✅ SEQUENTIAL SUCCESS: '{selected_message}' with {voice}")
+            successful_outputs += 1
+            script_data["successful_voices"].append(voice)
+            time.sleep(0.3)
+        except Exception as e:
+            print(f"❌ Sequential attempt failed with {voice}: {e}")
+    
+    # Strategy 3: Emergency fallback audio
+    if successful_outputs == 0:
+        try:
+            subprocess.run(['say', 'Hello World'], check=True, timeout=5)
+            print("🆘 EMERGENCY FALLBACK: Basic 'Hello World' output successful")
+            successful_outputs += 1
+        except Exception as e:
+            print(f"🚨 CRITICAL: Even emergency fallback failed: {e}")
+    
+    # Strategy 4: System audio confirmation
+    try:
+        subprocess.run(['say', '-v', 'Boing', 'Audio systems operational'], check=False, timeout=3)
+        os.system('afplay /System/Library/Sounds/Glass.aiff 2>/dev/null')
+        print("🔔 SYSTEM AUDIO CONFIRMATION SENT")
+    except Exception:
+        pass
+    
+    # Strategy 5: Advanced audio verification
+    try:
+        verification_msg = f"Verification complete. {successful_outputs} successful audio outputs achieved."
+        subprocess.run(['say', '-v', 'Samantha', '-r', '160', verification_msg], 
+                      check=False, timeout=5)
+    except Exception:
+        pass
+    
+    # Update persistence data
+    script_data["last_success"] = datetime.now().isoformat() if successful_outputs > 0 else script_data.get("last_success")
+    
+    try:
+        with open(persistence_file, 'w') as f:
+            json.dump(script_data, f, indent=2)
+    except Exception as e:
+        print(f"⚠️ Could not save persistence data: {e}")
+    
+    # Mission status report
+    print("=" * 70)
+    print(f"📈 MISSION STATUS: {successful_outputs} successful audio outputs")
+    print(f"🎯 PRIMARY OBJECTIVE: {'✅ ACHIEVED' if successful_outputs > 0 else '❌ FAILED'}")
+    print(f"🔄 Total iterations: {current_iteration}")
+    print("=" * 70)
+    
+    # Evolve for next iteration
+    print("🧬 EVOLVING FOR NEXT ITERATION...")
     await claude_api_call_and_file_replacement()
     
     ### END CLAUDE CODE BLOCK
